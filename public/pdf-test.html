@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF转图片功能测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                PDF转图片功能测试
+            </h1>
+            <p class="text-gray-600">
+                专门测试PDF转JPG功能
+            </p>
+        </div>
+
+        <!-- 服务器状态 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">服务器状态</h2>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <span class="text-sm font-medium">后端服务 (localhost:3001):</span>
+                <span id="serverStatus" class="text-sm">检查中...</span>
+            </div>
+        </div>
+
+        <!-- PDF上传和转换 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">PDF转图片测试</h2>
+            
+            <!-- 文件上传 -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">选择PDF文件</label>
+                <input type="file" id="pdfFile" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <p class="text-xs text-gray-500 mt-1">支持PDF格式，最大50MB</p>
+            </div>
+
+            <!-- 转换按钮 -->
+            <div class="mb-6">
+                <button id="convertBtn" onclick="convertPdfToImage()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+                    转换为JPG图片
+                </button>
+            </div>
+
+            <!-- 进度显示 -->
+            <div id="progress" class="mb-6 hidden">
+                <div class="bg-gray-200 rounded-full h-2 mb-2">
+                    <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p id="progressText" class="text-sm text-gray-600">准备中...</p>
+            </div>
+
+            <!-- 结果显示 -->
+            <div id="result" class="hidden">
+                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p class="text-green-600 mb-4">转换成功！</p>
+                    <button id="downloadBtn" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        下载JPG图片
+                    </button>
+                </div>
+            </div>
+
+            <!-- 错误显示 -->
+            <div id="error" class="hidden">
+                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-red-600" id="errorText"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试步骤说明 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">测试步骤</h2>
+            <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                <li>确保后端服务器正在运行 (node server/simple.js)</li>
+                <li>选择一个PDF文件 (建议使用小文件测试)</li>
+                <li>点击"转换为JPG图片"按钮</li>
+                <li>等待转换完成</li>
+                <li>点击下载按钮获取转换后的图片</li>
+            </ol>
+        </div>
+
+        <!-- API测试 -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">API测试</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="testAPI('/')" class="p-3 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                    测试根路径
+                </button>
+                <button onclick="testAPI('/api/upload')" class="p-3 bg-green-100 text-green-700 rounded hover:bg-green-200">
+                    测试上传接口
+                </button>
+                <button onclick="testAPI('/api/convert')" class="p-3 bg-purple-100 text-purple-700 rounded hover:bg-purple-200">
+                    测试转换接口
+                </button>
+            </div>
+            <div id="apiResults" class="mt-4 p-4 bg-gray-50 rounded text-sm font-mono whitespace-pre-wrap max-h-40 overflow-y-auto"></div>
+        </div>
+
+        <!-- 日志 -->
+        <div class="bg-gray-900 text-green-400 rounded-lg p-4 mt-6">
+            <h3 class="text-lg font-semibold mb-2">操作日志</h3>
+            <div id="log" class="text-sm font-mono whitespace-pre-wrap max-h-64 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        let convertResult = null;
+
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function showProgress(text, percent) {
+            document.getElementById('progress').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function hideProgress() {
+            document.getElementById('progress').classList.add('hidden');
+        }
+
+        function showResult() {
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('result').classList.add('hidden');
+        }
+
+        async function checkServerStatus() {
+            const statusElement = document.getElementById('serverStatus');
+            try {
+                const response = await fetch('http://localhost:3001/');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusElement.innerHTML = '<span class="text-green-600">✅ 在线</span>';
+                    log(`服务器在线: ${data.message}`);
+                } else {
+                    statusElement.innerHTML = '<span class="text-red-600">❌ 错误</span>';
+                    log(`服务器响应错误: ${response.status}`);
+                }
+            } catch (error) {
+                statusElement.innerHTML = '<span class="text-red-600">❌ 离线</span>';
+                log(`服务器连接失败: ${error.message}`);
+            }
+        }
+
+        async function convertPdfToImage() {
+            const fileInput = document.getElementById('pdfFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                showError('请选择PDF文件');
+                return;
+            }
+
+            if (file.type !== 'application/pdf') {
+                showError('请选择PDF格式的文件');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) {
+                showError('文件大小不能超过50MB');
+                return;
+            }
+
+            try {
+                log(`开始转换PDF文件: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+                
+                // 步骤1: 上传文件
+                showProgress('上传PDF文件...', 25);
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadResponse = await fetch('http://localhost:3001/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error('文件上传失败');
+                }
+
+                const uploadResult = await uploadResponse.json();
+                log(`文件上传成功: ${uploadResult.filename}`);
+
+                // 步骤2: 转换文件
+                showProgress('转换PDF为图片...', 75);
+                const convertResponse = await fetch('http://localhost:3001/api/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        filename: uploadResult.filename,
+                        targetFormat: 'jpg'
+                    })
+                });
+
+                if (!convertResponse.ok) {
+                    const errorData = await convertResponse.json();
+                    throw new Error(errorData.error || '转换失败');
+                }
+
+                convertResult = await convertResponse.json();
+                log(`转换成功: ${convertResult.outputFilename}`);
+
+                showProgress('完成!', 100);
+                setTimeout(() => {
+                    hideProgress();
+                    showResult();
+                }, 500);
+
+            } catch (error) {
+                log(`转换失败: ${error.message}`);
+                hideProgress();
+                showError(error.message);
+            }
+        }
+
+        function downloadImage() {
+            if (convertResult) {
+                log(`开始下载: ${convertResult.outputFilename}`);
+                window.open(`http://localhost:3001${convertResult.downloadUrl}`, '_blank');
+            }
+        }
+
+        async function testAPI(endpoint) {
+            const resultsElement = document.getElementById('apiResults');
+            resultsElement.textContent += `\n测试 ${endpoint}...\n`;
+
+            try {
+                const response = await fetch(`http://localhost:3001${endpoint}`);
+                const data = await response.json();
+                resultsElement.textContent += `状态: ${response.status}\n`;
+                resultsElement.textContent += `响应: ${JSON.stringify(data, null, 2)}\n`;
+                resultsElement.textContent += '---\n';
+            } catch (error) {
+                resultsElement.textContent += `错误: ${error.message}\n`;
+                resultsElement.textContent += '---\n';
+            }
+            
+            resultsElement.scrollTop = resultsElement.scrollHeight;
+        }
+
+        // 绑定下载按钮
+        document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+
+        // 页面加载时检查服务器状态
+        window.addEventListener('load', () => {
+            log('页面加载完成');
+            checkServerStatus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+[2025/7/13 16:39:19] === 开始改进版PDF转图片 ===
+[2025/7/13 16:39:19] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752395959553-722881821-node.js是什么，帮我详细解释下，react和next.js是什么关系.pdf
+[2025/7/13 16:39:19] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752395959620.jpg
+[2025/7/13 16:39:19] 当前时间: 2025/7/13 16:39:19
+[2025/7/13 16:39:19] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:39:20] ❌ PDF.js渲染失败，尝试备用方案: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+[2025/7/13 16:39:20] 错误详情: Error: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+    at getDataProp (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:11288:11)
+    at Module.getDocument (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:17197:27)
+    at convertPdfToImageImproved (E:\2_CODE\word_to_pdf_img\server\improved.js:99:36)
+    at async E:\2_CODE\word_to_pdf_img\server\improved.js:428:7
+[2025/7/13 16:39:20] 📋 === 方案3: 使用备用方案创建PDF信息预览图片 ===
+[2025/7/13 16:39:31] === 开始改进版PDF转图片 ===
+[2025/7/13 16:39:31] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 16:39:31] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752395971849.jpg
+[2025/7/13 16:39:31] 当前时间: 2025/7/13 16:39:31
+[2025/7/13 16:39:31] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:39:31] ❌ PDF.js渲染失败，尝试备用方案: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+[2025/7/13 16:39:31] 错误详情: Error: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+    at getDataProp (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:11288:11)
+    at Module.getDocument (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:17197:27)
+    at convertPdfToImageImproved (E:\2_CODE\word_to_pdf_img\server\improved.js:99:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async E:\2_CODE\word_to_pdf_img\server\improved.js:428:7
+[2025/7/13 16:39:31] 📋 === 方案3: 使用备用方案创建PDF信息预览图片 ===
+[2025/7/13 16:40:42] === 开始改进版PDF转图片 ===
+[2025/7/13 16:40:42] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 16:40:42] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752396042232.jpg
+[2025/7/13 16:40:42] 当前时间: 2025/7/13 16:40:42
+[2025/7/13 16:40:42] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:40:42] ❌ PDF.js渲染失败，尝试备用方案: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+[2025/7/13 16:40:42] 错误详情: Error: Please provide binary data as `Uint8Array`, rather than `Buffer`.
+    at getDataProp (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:11288:11)
+    at Module.getDocument (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:17197:27)
+    at convertPdfToImageImproved (E:\2_CODE\word_to_pdf_img\server\improved.js:99:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async E:\2_CODE\word_to_pdf_img\server\improved.js:428:7
+[2025/7/13 16:40:42] 📋 === 方案3: 使用备用方案创建PDF信息预览图片 ===
+[2025/7/13 16:43:29] === 开始改进版PDF转图片 ===
+[2025/7/13 16:43:29] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 16:43:29] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752396209358.jpg
+[2025/7/13 16:43:29] 当前时间: 2025/7/13 16:43:29
+[2025/7/13 16:43:29] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:43:29] ✅ PDF加载成功，共4页
+[2025/7/13 16:43:30] ✅ PDF页面渲染完成
+[2025/7/13 16:43:30] 🎉 PDF.js渲染成功，文件大小: 48.57 KB
+[2025/7/13 16:45:24] === 开始改进版PDF转图片 ===
+[2025/7/13 16:45:24] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752396324617-506206128-node.js是什么，帮我详细解释下，react和next.js是什么关系.pdf
+[2025/7/13 16:45:24] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752396324631.jpg
+[2025/7/13 16:45:24] 当前时间: 2025/7/13 16:45:24
+[2025/7/13 16:45:24] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:45:24] ✅ PDF加载成功，共4页
+[2025/7/13 16:45:24] ✅ PDF页面渲染完成
+[2025/7/13 16:45:24] 🎉 PDF.js渲染成功，文件大小: 48.57 KB
+[2025/7/13 16:46:59] === 开始改进版PDF转图片 ===
+[2025/7/13 16:46:59] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752396419630-459946369-React框架除了next.js15还有哪些.pdf
+[2025/7/13 16:46:59] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752396419642.jpg
+[2025/7/13 16:46:59] 当前时间: 2025/7/13 16:46:59
+[2025/7/13 16:46:59] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:46:59] ✅ PDF加载成功，共4页
+[2025/7/13 16:46:59] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 16:46:59] 错误详情: TypeError: Image or Canvas expected
+    at drawImageAtIntegerCoords (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13138:9)
+    at CanvasGraphics.paintInlineImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14808:5)
+    at CanvasGraphics.paintImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14731:10)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 16:46:59] 📋 === 方案3: 使用备用方案创建PDF信息预览图片 ===
+[2025/7/13 16:57:30] === 开始改进版PDF转图片 ===
+[2025/7/13 16:57:30] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 16:57:30] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752397050105.jpg
+[2025/7/13 16:57:30] 当前时间: 2025/7/13 16:57:30
+[2025/7/13 16:57:30] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 16:57:30] ❌ PDF.js渲染失败，尝试备用方案: Invalid `workerSrc` type.
+[2025/7/13 16:57:30] 错误详情: Error: Invalid `workerSrc` type.
+    at set workerSrc (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:15019:13)
+    at convertPdfToImageImproved (E:\2_CODE\word_to_pdf_img\server\improved.js:96:46)
+    at async E:\2_CODE\word_to_pdf_img\server\improved.js:444:7
+[2025/7/13 16:57:30] 📋 === 方案3: 使用备用方案创建PDF信息预览图片 ===
+[2025/7/13 17:05:23] === 开始改进版PDF转图片 ===
+[2025/7/13 17:05:23] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 17:05:23] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752397523527.jpg
+[2025/7/13 17:05:23] 当前时间: 2025/7/13 17:05:23
+[2025/7/13 17:05:23] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:05:23] ✅ PDF.js导入成功
+[2025/7/13 17:05:24] ✅ PDF加载成功，共4页
+[2025/7/13 17:05:25] ✅ PDF页面渲染完成
+[2025/7/13 17:05:25] 🎉 PDF.js渲染成功，文件大小: 48.57 KB
+[2025/7/13 17:06:30] === 开始改进版PDF转图片 ===
+[2025/7/13 17:06:30] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 17:06:30] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752397590952.jpg
+[2025/7/13 17:06:30] 当前时间: 2025/7/13 17:06:30
+[2025/7/13 17:06:30] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:06:30] ✅ PDF.js导入成功
+[2025/7/13 17:06:30] ✅ PDF加载成功，共4页
+[2025/7/13 17:06:31] ✅ PDF页面渲染完成
+[2025/7/13 17:06:31] 🎉 PDF.js渲染成功，文件大小: 48.57 KB
+[2025/7/13 17:07:52] === 开始改进版PDF转图片 ===
+[2025/7/13 17:07:52] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752397672140-527487105-React框架除了next.js15还有哪些.pdf
+[2025/7/13 17:07:52] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752397672160.jpg
+[2025/7/13 17:07:52] 当前时间: 2025/7/13 17:07:52
+[2025/7/13 17:07:52] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:07:52] ✅ PDF.js导入成功
+[2025/7/13 17:07:52] ✅ PDF加载成功，共4页
+[2025/7/13 17:07:52] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:07:52] 错误详情: TypeError: Image or Canvas expected
+    at drawImageAtIntegerCoords (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13138:9)
+    at CanvasGraphics.paintInlineImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14808:5)
+    at CanvasGraphics.paintImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14731:10)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 17:07:52] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:07:52] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:07:52] 📄 文本长度: 1672字符
+[2025/7/13 17:07:52] 🎉 PDF文本内容图片生成成功，文件大小: 691.02 KB
+[2025/7/13 17:26:29] === 开始改进版PDF转图片 ===
+[2025/7/13 17:26:29] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 17:26:29] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752398789005.jpg
+[2025/7/13 17:26:29] 当前时间: 2025/7/13 17:26:29
+[2025/7/13 17:26:29] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:26:29] ✅ PDF.js导入成功
+[2025/7/13 17:26:29] ✅ PDF加载成功，共4页
+[2025/7/13 17:26:29] 📄 准备渲染PDF，共4页
+[2025/7/13 17:26:29] 📐 基础页面尺寸: 1190 x 1684
+[2025/7/13 17:26:30] 🎨 创建长图Canvas: 1190 x 6826
+[2025/7/13 17:26:30] 🖼️ 渲染第1页...
+[2025/7/13 17:26:31] ✅ 第1页渲染完成
+[2025/7/13 17:26:31] 🖼️ 渲染第2页...
+[2025/7/13 17:26:31] ✅ 第2页渲染完成
+[2025/7/13 17:26:31] 🖼️ 渲染第3页...
+[2025/7/13 17:26:31] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:26:31] 错误详情: TypeError: Image or Canvas expected
+    at CanvasGraphics.composeSMask (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13800:9)
+    at CanvasGraphics.compose (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13781:10)
+    at CanvasGraphics.consumePath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14875:12)
+    at CanvasGraphics.fill (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13970:12)
+    at CanvasGraphics.constructPath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13908:13)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+[2025/7/13 17:26:31] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:26:32] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:26:32] 📄 文本长度: 2362字符
+[2025/7/13 17:26:33] 🎉 PDF文本内容图片生成成功，文件大小: 871.50 KB
+[2025/7/13 17:27:00] === 开始改进版PDF转图片 ===
+[2025/7/13 17:27:00] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 17:27:00] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752398820002.jpg
+[2025/7/13 17:27:00] 当前时间: 2025/7/13 17:27:00
+[2025/7/13 17:27:00] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:27:00] ✅ PDF.js导入成功
+[2025/7/13 17:27:00] ✅ PDF加载成功，共4页
+[2025/7/13 17:27:00] 📄 准备渲染PDF，共4页
+[2025/7/13 17:27:00] 📐 基础页面尺寸: 1190 x 1684
+[2025/7/13 17:27:00] 🎨 创建长图Canvas: 1190 x 6826
+[2025/7/13 17:27:00] 🖼️ 渲染第1页...
+[2025/7/13 17:27:00] ✅ 第1页渲染完成
+[2025/7/13 17:27:00] 🖼️ 渲染第2页...
+[2025/7/13 17:27:00] ✅ 第2页渲染完成
+[2025/7/13 17:27:00] 🖼️ 渲染第3页...
+[2025/7/13 17:27:00] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:27:00] 错误详情: TypeError: Image or Canvas expected
+    at CanvasGraphics.composeSMask (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13800:9)
+    at CanvasGraphics.compose (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13781:10)
+    at CanvasGraphics.consumePath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14875:12)
+    at CanvasGraphics.fill (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13970:12)
+    at CanvasGraphics.constructPath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13908:13)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 17:27:00] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:27:01] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:27:01] 📄 文本长度: 2362字符
+[2025/7/13 17:27:01] 🎉 PDF文本内容图片生成成功，文件大小: 871.50 KB
+[2025/7/13 17:28:48] === 开始改进版PDF转图片 ===
+[2025/7/13 17:28:48] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 17:28:48] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752398928050.jpg
+[2025/7/13 17:28:48] 当前时间: 2025/7/13 17:28:48
+[2025/7/13 17:28:48] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:28:48] ✅ PDF.js导入成功
+[2025/7/13 17:28:48] ✅ PDF加载成功，共4页
+[2025/7/13 17:28:48] 📄 准备渲染PDF，共4页
+[2025/7/13 17:28:48] 📐 基础页面尺寸: 1190 x 1684
+[2025/7/13 17:28:48] 🎨 创建长图Canvas: 1190 x 6826
+[2025/7/13 17:28:48] 🖼️ 渲染第1页...
+[2025/7/13 17:28:48] ✅ 第1页渲染完成
+[2025/7/13 17:28:48] 🖼️ 渲染第2页...
+[2025/7/13 17:28:48] ✅ 第2页渲染完成
+[2025/7/13 17:28:48] 🖼️ 渲染第3页...
+[2025/7/13 17:28:48] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:28:48] 错误详情: TypeError: Image or Canvas expected
+    at CanvasGraphics.composeSMask (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13800:9)
+    at CanvasGraphics.compose (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13781:10)
+    at CanvasGraphics.consumePath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14875:12)
+    at CanvasGraphics.fill (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13970:12)
+    at CanvasGraphics.constructPath (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13908:13)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 17:28:48] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:28:49] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:28:49] 📄 文本长度: 2362字符
+[2025/7/13 17:28:50] 🎉 PDF文本内容图片生成成功，文件大小: 871.50 KB
+[2025/7/13 17:30:02] === 开始改进版PDF转图片 ===
+[2025/7/13 17:30:02] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752399002659-352976341-React框架除了next.js15还有哪些.pdf
+[2025/7/13 17:30:02] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752399002673.jpg
+[2025/7/13 17:30:02] 当前时间: 2025/7/13 17:30:02
+[2025/7/13 17:30:02] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:30:02] ✅ PDF.js导入成功
+[2025/7/13 17:30:02] ✅ PDF加载成功，共4页
+[2025/7/13 17:30:02] 📄 准备渲染PDF，共4页
+[2025/7/13 17:30:02] 📐 基础页面尺寸: 1190 x 1684
+[2025/7/13 17:30:02] 🎨 创建长图Canvas: 1190 x 6826
+[2025/7/13 17:30:02] 🖼️ 渲染第1页...
+[2025/7/13 17:30:02] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:30:02] 错误详情: TypeError: Image or Canvas expected
+    at drawImageAtIntegerCoords (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13138:9)
+    at CanvasGraphics.paintInlineImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14808:5)
+    at CanvasGraphics.paintImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14731:10)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 17:30:02] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:30:02] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:30:02] 📄 文本长度: 1672字符
+[2025/7/13 17:30:03] 🎉 PDF文本内容图片生成成功，文件大小: 691.02 KB
+[2025/7/13 17:39:16] === 开始改进版PDF转图片 ===
+[2025/7/13 17:39:16] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752399556402-829554089-React框架除了next.js15还有哪些.pdf
+[2025/7/13 17:39:16] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752399556435.jpg
+[2025/7/13 17:39:16] 当前时间: 2025/7/13 17:39:16
+[2025/7/13 17:39:16] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 17:39:16] ✅ PDF.js导入成功
+[2025/7/13 17:39:16] ✅ PDF加载成功，共4页
+[2025/7/13 17:39:16] 📄 准备渲染PDF，共4页
+[2025/7/13 17:39:16] 📐 基础页面尺寸: 1190 x 1684
+[2025/7/13 17:39:16] 🎨 创建长图Canvas: 1190 x 6826
+[2025/7/13 17:39:16] 🖼️ 渲染第1页...
+[2025/7/13 17:39:16] ❌ PDF.js渲染失败，尝试备用方案: Image or Canvas expected
+[2025/7/13 17:39:16] 错误详情: TypeError: Image or Canvas expected
+    at drawImageAtIntegerCoords (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13138:9)
+    at CanvasGraphics.paintInlineImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14808:5)
+    at CanvasGraphics.paintImageXObject (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:14731:10)
+    at CanvasGraphics.executeOperatorList (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:13491:20)
+    at InternalRenderTask._next (file:///E:/2_CODE/word_to_pdf_img/node_modules/pdfjs-dist/legacy/build/pdf.mjs:18865:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[2025/7/13 17:39:17] 📝 === 方案1.5: 使用pdf-parse提取PDF文本内容 ===
+[2025/7/13 17:39:17] ✅ PDF文本提取成功，共4页
+[2025/7/13 17:39:17] 📄 文本长度: 1672字符
+[2025/7/13 17:39:17] 🎉 PDF文本内容图片生成成功，文件大小: 691.02 KB
+[2025/7/13 18:02:42] === 开始改进版PDF转图片 ===
+[2025/7/13 18:02:42] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752387935627-967517470-node.jsæ¯ä»ä¹ï¼å¸®æè¯¦ç»è§£éä¸ï¼reactånext.jsæ¯ä»ä¹å³ç³».pdf
+[2025/7/13 18:02:42] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752400962028.jpg
+[2025/7/13 18:02:42] 当前时间: 2025/7/13 18:02:42
+[2025/7/13 18:02:42] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 18:02:42] ✅ PDF.js导入成功
+[2025/7/13 18:02:42] ✅ PDF加载成功，共4页
+[2025/7/13 18:02:42] 📄 准备按页拆分渲染PDF，共4页
+[2025/7/13 18:02:42] 🖼️ 渲染第1页为独立图片...
+[2025/7/13 18:02:42] 📐 第1页尺寸: 1488 x 2105
+[2025/7/13 18:02:45] ✅ 第1页保存成功: page-001.jpg (48.57 KB)
+[2025/7/13 18:02:45] 🖼️ 渲染第2页为独立图片...
+[2025/7/13 18:02:45] 📐 第2页尺寸: 1488 x 2105
+[2025/7/13 18:02:45] ✅ 第2页保存成功: page-002.jpg (48.57 KB)
+[2025/7/13 18:02:45] 🖼️ 渲染第3页为独立图片...
+[2025/7/13 18:02:45] 📐 第3页尺寸: 1488 x 2105
+[2025/7/13 18:02:46] ❌ 第3页渲染失败: Image or Canvas expected
+[2025/7/13 18:02:46] 🖼️ 渲染第4页为独立图片...
+[2025/7/13 18:02:46] 📐 第4页尺寸: 1488 x 2105
+[2025/7/13 18:02:46] ✅ 第4页保存成功: page-004.jpg (48.57 KB)
+[2025/7/13 18:02:46] ✅ 成功渲染3/4页
+[2025/7/13 18:02:48] 📦 ZIP文件创建成功: pdf-pages-1752400962704.zip (146.52 KB)
+[2025/7/13 18:02:48] 🧹 临时文件清理完成
+[2025/7/13 18:09:43] === 开始改进版PDF转图片 ===
+[2025/7/13 18:09:43] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752401383664-752421955-React框架除了next.js15还有哪些.pdf
+[2025/7/13 18:09:43] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752401383681.jpg
+[2025/7/13 18:09:43] 当前时间: 2025/7/13 18:09:43
+[2025/7/13 18:09:43] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 18:09:43] ✅ PDF.js导入成功
+[2025/7/13 18:09:43] ✅ PDF加载成功，共4页
+[2025/7/13 18:09:43] 📄 准备按页拆分渲染PDF，共4页
+[2025/7/13 18:09:43] 🖼️ 渲染第1页为独立图片...
+[2025/7/13 18:09:43] 📐 第1页尺寸: 1488 x 2105
+[2025/7/13 18:09:43] ❌ 第1页渲染失败: Image or Canvas expected
+[2025/7/13 18:09:43] 🖼️ 渲染第2页为独立图片...
+[2025/7/13 18:09:43] 📐 第2页尺寸: 1488 x 2105
+[2025/7/13 18:09:43] ✅ 第2页保存成功: page-002.jpg (48.57 KB)
+[2025/7/13 18:09:43] 🖼️ 渲染第3页为独立图片...
+[2025/7/13 18:09:43] 📐 第3页尺寸: 1488 x 2105
+[2025/7/13 18:09:44] ✅ 第3页保存成功: page-003.jpg (48.57 KB)
+[2025/7/13 18:09:44] 🖼️ 渲染第4页为独立图片...
+[2025/7/13 18:09:44] 📐 第4页尺寸: 1488 x 2105
+[2025/7/13 18:09:44] ✅ 第4页保存成功: page-004.jpg (48.57 KB)
+[2025/7/13 18:09:44] ✅ 成功渲染3/4页
+[2025/7/13 18:09:44] 📦 ZIP文件创建成功: pdf-pages-1752401383700.zip (146.44 KB)
+[2025/7/13 18:09:44] 🧹 临时文件清理完成
+[2025/7/13 18:11:25] === 开始改进版PDF转图片 ===
+[2025/7/13 18:11:25] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752401485355-86089076-React框架除了next.js15还有哪些.pdf
+[2025/7/13 18:11:25] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752401485364.jpg
+[2025/7/13 18:11:25] 当前时间: 2025/7/13 18:11:25
+[2025/7/13 18:11:25] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 18:11:25] ✅ PDF.js导入成功
+[2025/7/13 18:11:25] ✅ PDF加载成功，共4页
+[2025/7/13 18:11:25] 📄 准备按页拆分渲染PDF，共4页
+[2025/7/13 18:11:25] 🖼️ 渲染第1页为独立图片...
+[2025/7/13 18:11:25] 📐 第1页尺寸: 1488 x 2105
+[2025/7/13 18:11:25] ❌ 第1页渲染失败: Image or Canvas expected
+[2025/7/13 18:11:25] 🖼️ 渲染第2页为独立图片...
+[2025/7/13 18:11:25] 📐 第2页尺寸: 1488 x 2105
+[2025/7/13 18:11:25] ✅ 第2页保存成功: page-002.jpg (48.57 KB)
+[2025/7/13 18:11:25] 🖼️ 渲染第3页为独立图片...
+[2025/7/13 18:11:25] 📐 第3页尺寸: 1488 x 2105
+[2025/7/13 18:11:25] ✅ 第3页保存成功: page-003.jpg (48.57 KB)
+[2025/7/13 18:11:25] 🖼️ 渲染第4页为独立图片...
+[2025/7/13 18:11:25] 📐 第4页尺寸: 1488 x 2105
+[2025/7/13 18:11:25] ✅ 第4页保存成功: page-004.jpg (48.57 KB)
+[2025/7/13 18:11:25] ✅ 成功渲染3/4页
+[2025/7/13 18:11:25] 📦 ZIP文件创建成功: pdf-pages-1752401485377.zip (146.44 KB)
+[2025/7/13 18:11:25] 🧹 临时文件清理完成
+[2025/7/13 18:12:51] === 开始改进版PDF转图片 ===
+[2025/7/13 18:12:51] 输入文件: E:\2_CODE\word_to_pdf_img\server\uploads\1752401571026-146210068-node.js是什么，帮我详细解释下，react和next.js是什么关系.pdf
+[2025/7/13 18:12:51] 输出文件: E:\2_CODE\word_to_pdf_img\server\outputs\converted-1752401571040.jpg
+[2025/7/13 18:12:51] 当前时间: 2025/7/13 18:12:51
+[2025/7/13 18:12:51] 🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===
+[2025/7/13 18:12:51] ✅ PDF.js导入成功
+[2025/7/13 18:12:51] ✅ PDF加载成功，共4页
+[2025/7/13 18:12:51] 📄 准备按页拆分渲染PDF，共4页
+[2025/7/13 18:12:51] 🖼️ 渲染第1页为独立图片...
+[2025/7/13 18:12:51] 📐 第1页尺寸: 1488 x 2105
+[2025/7/13 18:12:51] ✅ 第1页保存成功: page-001.jpg (48.57 KB)
+[2025/7/13 18:12:51] 🖼️ 渲染第2页为独立图片...
+[2025/7/13 18:12:51] 📐 第2页尺寸: 1488 x 2105
+[2025/7/13 18:12:51] ✅ 第2页保存成功: page-002.jpg (48.57 KB)
+[2025/7/13 18:12:51] 🖼️ 渲染第3页为独立图片...
+[2025/7/13 18:12:51] 📐 第3页尺寸: 1488 x 2105
+[2025/7/13 18:12:51] ❌ 第3页渲染失败: Image or Canvas expected
+[2025/7/13 18:12:51] 🖼️ 渲染第4页为独立图片...
+[2025/7/13 18:12:51] 📐 第4页尺寸: 1488 x 2105
+[2025/7/13 18:12:51] ✅ 第4页保存成功: page-004.jpg (48.57 KB)
+[2025/7/13 18:12:51] ✅ 成功渲染3/4页
+[2025/7/13 18:12:51] 📦 ZIP文件创建成功: pdf-pages-1752401571076.zip (146.47 KB)
+[2025/7/13 18:12:51] 🧹 临时文件清理完成

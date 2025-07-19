@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件转换工具 - 功能测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 py-8 px-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                文件转换工具 - 功能测试页面
+            </h1>
+            <p class="text-gray-600">
+                测试各种转换功能和API接口
+            </p>
+        </div>
+
+        <!-- 服务器状态检查 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">服务器状态检查</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">后端服务器 (3001)</h3>
+                    <button onclick="checkServer(3001)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        检查状态
+                    </button>
+                    <div id="server-3001" class="mt-2 text-sm"></div>
+                </div>
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">前端服务器 (3000)</h3>
+                    <button onclick="checkServer(3000)" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        检查状态
+                    </button>
+                    <div id="server-3000" class="mt-2 text-sm"></div>
+                </div>
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">测试服务器 (3002)</h3>
+                    <button onclick="checkServer(3002)" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                        检查状态
+                    </button>
+                    <div id="server-3002" class="mt-2 text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API测试 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">API接口测试</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">GET /</h3>
+                    <button onclick="testAPI('GET', '/')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        测试
+                    </button>
+                    <div id="api-get-root" class="mt-2 text-sm"></div>
+                </div>
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">POST /api/upload</h3>
+                    <input type="file" id="testFile" class="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    <button onclick="testUpload()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        测试上传
+                    </button>
+                    <div id="api-upload" class="mt-2 text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 转换功能测试 -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">转换功能测试</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">图片 → PDF</h3>
+                    <p class="text-sm text-gray-600 mb-2">支持 JPG, PNG</p>
+                    <div class="space-y-2">
+                        <div class="text-xs">前端: ✅ 已实现</div>
+                        <div class="text-xs">后端: ✅ 已实现</div>
+                    </div>
+                </div>
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">PDF → 图片</h3>
+                    <p class="text-sm text-gray-600 mb-2">输出 JPG 格式</p>
+                    <div class="space-y-2">
+                        <div class="text-xs">前端: ❌ 未实现</div>
+                        <div class="text-xs">后端: 🚧 基础实现</div>
+                    </div>
+                </div>
+                <div class="p-4 border rounded">
+                    <h3 class="font-medium mb-2">Word → PDF</h3>
+                    <p class="text-sm text-gray-600 mb-2">支持 DOCX, DOC</p>
+                    <div class="space-y-2">
+                        <div class="text-xs">前端: ❌ 未实现</div>
+                        <div class="text-xs">后端: ❌ 未实现</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速链接 -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">快速链接</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="index.html" class="p-4 border rounded text-center hover:bg-gray-50">
+                    <div class="font-medium">基础版本</div>
+                    <div class="text-sm text-gray-600">index.html</div>
+                </a>
+                <a href="app.html" class="p-4 border rounded text-center hover:bg-gray-50">
+                    <div class="font-medium">完整版本</div>
+                    <div class="text-sm text-gray-600">app.html</div>
+                </a>
+                <a href="http://localhost:3000" target="_blank" class="p-4 border rounded text-center hover:bg-gray-50">
+                    <div class="font-medium">Next.js应用</div>
+                    <div class="text-sm text-gray-600">localhost:3000</div>
+                </a>
+                <a href="http://localhost:3001" target="_blank" class="p-4 border rounded text-center hover:bg-gray-50">
+                    <div class="font-medium">后端API</div>
+                    <div class="text-sm text-gray-600">localhost:3001</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 日志输出 -->
+        <div class="bg-gray-900 text-green-400 rounded-lg p-4 mt-6">
+            <h3 class="text-lg font-semibold mb-2">测试日志</h3>
+            <div id="log" class="text-sm font-mono whitespace-pre-wrap max-h-64 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        async function checkServer(port) {
+            const statusElement = document.getElementById(`server-${port}`);
+            statusElement.innerHTML = '<span class="text-yellow-600">检查中...</span>';
+            
+            try {
+                const response = await fetch(`http://localhost:${port}/`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusElement.innerHTML = '<span class="text-green-600">✅ 在线</span>';
+                    log(`服务器 ${port} 在线: ${JSON.stringify(data)}`);
+                } else {
+                    statusElement.innerHTML = '<span class="text-red-600">❌ 错误</span>';
+                    log(`服务器 ${port} 响应错误: ${response.status}`);
+                }
+            } catch (error) {
+                statusElement.innerHTML = '<span class="text-red-600">❌ 离线</span>';
+                log(`服务器 ${port} 连接失败: ${error.message}`);
+            }
+        }
+
+        async function testAPI(method, path) {
+            const resultElement = document.getElementById(`api-${method.toLowerCase()}-${path.replace('/', 'root')}`);
+            resultElement.innerHTML = '<span class="text-yellow-600">测试中...</span>';
+            
+            try {
+                const response = await fetch(`http://localhost:3001${path}`, { method });
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElement.innerHTML = '<span class="text-green-600">✅ 成功</span>';
+                    log(`API ${method} ${path} 成功: ${JSON.stringify(data)}`);
+                } else {
+                    resultElement.innerHTML = '<span class="text-red-600">❌ 失败</span>';
+                    log(`API ${method} ${path} 失败: ${response.status}`);
+                }
+            } catch (error) {
+                resultElement.innerHTML = '<span class="text-red-600">❌ 错误</span>';
+                log(`API ${method} ${path} 错误: ${error.message}`);
+            }
+        }
+
+        async function testUpload() {
+            const fileInput = document.getElementById('testFile');
+            const resultElement = document.getElementById('api-upload');
+            
+            if (!fileInput.files[0]) {
+                resultElement.innerHTML = '<span class="text-red-600">请选择文件</span>';
+                return;
+            }
+            
+            resultElement.innerHTML = '<span class="text-yellow-600">上传中...</span>';
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                
+                const response = await fetch('http://localhost:3001/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElement.innerHTML = '<span class="text-green-600">✅ 成功</span>';
+                    log(`文件上传成功: ${JSON.stringify(data)}`);
+                } else {
+                    const error = await response.json();
+                    resultElement.innerHTML = '<span class="text-red-600">❌ 失败</span>';
+                    log(`文件上传失败: ${JSON.stringify(error)}`);
+                }
+            } catch (error) {
+                resultElement.innerHTML = '<span class="text-red-600">❌ 错误</span>';
+                log(`文件上传错误: ${error.message}`);
+            }
+        }
+
+        // 页面加载时自动检查服务器状态
+        window.addEventListener('load', () => {
+            log('页面加载完成，开始检查服务器状态...');
+            checkServer(3001);
+            setTimeout(() => checkServer(3000), 1000);
+            setTimeout(() => checkServer(3002), 2000);
+        });
+    </script>
+</body>
+</html>
