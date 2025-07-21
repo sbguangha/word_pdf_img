@@ -10,11 +10,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.21",
     "canvas": "^3.1.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "jspdf": "^3.0.1",
     "jszip": "^3.10.1",
+    "lightningcss": "^1.30.1",
     "multer": "^2.0.1",
     "next": "15.3.5",
     "pdf-lib": "^1.17.1",
@@ -22,14 +24,15 @@
     "pdf-poppler": "^0.2.1",
     "pdf2pic": "^3.2.0",
     "pdfjs-dist": "^5.3.93",
+    "postcss": "^8.5.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
-    "sharp": "^0.34.3"
+    "sharp": "^0.34.3",
+    "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0",
@@ -39,7 +42,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "nodemon": "^3.1.10",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }

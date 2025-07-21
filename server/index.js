@@ -66,33 +66,91 @@ const convertWordToPdf = async (inputPath, outputPath) => {
   throw new Error('Word to PDF conversion not implemented yet');
 };
 
-const convertPdfToImage = async (inputPath, outputPath) => {
+// 增强版PDF转图片函数 - 支持多页、多格式、质量选择
+const convertPdfToImageEnhanced = async (inputPath, outputPath, options = {}) => {
   try {
-    console.log('开始PDF转图片:', inputPath, '->', outputPath);
+    const {
+      format = 'jpg',           // 输出格式: jpg, png, tiff
+      quality = 'high',         // 质量: low(150dpi), medium(200dpi), high(300dpi), ultra(600dpi)
+      pages = 'first',          // 页面选择: 'first', 'all', [1,2,3], '1-3'
+      compression = 85          // 压缩质量 (1-100)
+    } = options;
 
-    // 方法1: 尝试使用pdf2pic
+    console.log('开始增强版PDF转图片:', inputPath);
+    console.log('转换选项:', { format, quality, pages, compression });
+
+    // 质量设置映射
+    const qualitySettings = {
+      low: { density: 150, width: 1240, height: 1754 },
+      medium: { density: 200, width: 1653, height: 2339 },
+      high: { density: 300, width: 2480, height: 3508 },
+      ultra: { density: 600, width: 4960, height: 7016 }
+    };
+
+    const settings = qualitySettings[quality] || qualitySettings.high;
+
+    // 方法1: 尝试使用pdf2pic进行高质量转换
     try {
-      const options = {
-        density: 300,
+      const pdf2picOptions = {
+        density: settings.density,
         saveFilename: "page",
         savePath: path.dirname(outputPath),
-        format: "jpg",
-        width: 2480,
-        height: 3508
+        format: format,
+        width: settings.width,
+        height: settings.height,
+        quality: compression
       };
 
-      const convert = pdf2pic.fromPath(inputPath, options);
-      console.log('正在使用pdf2pic转换...');
-      const result = await convert(1, false);
+      const convert = pdf2pic.fromPath(inputPath, pdf2picOptions);
+      console.log(`正在使用pdf2pic转换 (${quality}质量, ${format}格式)...`);
 
-      if (result && result.path && fs.existsSync(result.path)) {
-        if (result.path !== outputPath) {
-          fs.renameSync(result.path, outputPath);
+      // 处理页面选择
+      let convertResults = [];
+
+      if (pages === 'first') {
+        // 只转换第一页
+        const result = await convert(1, false);
+        if (result && result.path && fs.existsSync(result.path)) {
+          convertResults.push(result);
         }
+      } else if (pages === 'all') {
+        // 转换所有页面
+        const results = await convert.bulk(-1, { responseType: "image" });
+        convertResults = results.filter(r => r && r.path && fs.existsSync(r.path));
+      } else if (Array.isArray(pages)) {
+        // 转换指定页面数组
+        for (const pageNum of pages) {
+          try {
+            const result = await convert(pageNum, false);
+            if (result && result.path && fs.existsSync(result.path)) {
+              convertResults.push(result);
+            }
+          } catch (pageError) {
+            console.log(`页面${pageNum}转换失败:`, pageError.message);
+          }
+        }
+      }
 
-        const stats = fs.statSync(outputPath);
-        console.log(`PDF转图片成功 (pdf2pic)，文件大小: ${(stats.size / 1024).toFixed(2)} KB`);
-        return outputPath;
+      if (convertResults.length > 0) {
+        if (convertResults.length === 1) {
+          // 单页转换 - 直接重命名
+          const result = convertResults[0];
+          if (result.path !== outputPath) {
+            fs.renameSync(result.path, outputPath);
+          }
+          const stats = fs.statSync(outputPath);
+          console.log(`PDF转图片成功 (pdf2pic)，文件大小: ${(stats.size / 1024).toFixed(2)} KB`);
+          return {
+            type: 'single',
+            path: outputPath,
+            pages: 1,
+            format: format,
+            quality: quality
+          };
+        } else {
+          // 多页转换 - 创建ZIP文件
+          return await createMultiPageZip(convertResults, outputPath, format);
+        }
       }
     } catch (pdf2picError) {
       console.log('pdf2pic转换失败，使用备用方案:', pdf2picError.message);
@@ -100,6 +158,71 @@ const convertPdfToImage = async (inputPath, outputPath) => {
 
     // 方法2: 备用方案 - 使用Canvas和PDF信息
     console.log('使用备用方案创建PDF预览图片');
+    return await createCanvasPreview(inputPath, outputPath, format, settings);
+
+  } catch (error) {
+    console.error('PDF转图片完全失败:', error);
+    throw error;
+  }
+};
+
+// 创建多页ZIP文件
+const createMultiPageZip = async (convertResults, outputPath, format) => {
+  try {
+    const JSZip = require('jszip');
+    const zip = new JSZip();
+
+    console.log(`创建多页ZIP文件，共${convertResults.length}页`);
+
+    // 添加每个页面到ZIP
+    for (let i = 0; i < convertResults.length; i++) {
+      const result = convertResults[i];
+      const pageBuffer = fs.readFileSync(result.path);
+      const fileName = `page-${String(i + 1).padStart(3, '0')}.${format}`;
+      zip.file(fileName, pageBuffer);
+
+      // 清理临时文件
+      try {
+        fs.unlinkSync(result.path);
+      } catch (cleanupError) {
+        console.log('清理临时文件失败:', cleanupError.message);
+      }
+    }
+
+    // 添加转换信息文件
+    const infoText = `PDF转图片转换信息
+转换时间: ${new Date().toLocaleString('zh-CN')}
+总页数: ${convertResults.length}
+输出格式: ${format.toUpperCase()}
+文件列表:
+${convertResults.map((_, i) => `page-${String(i + 1).padStart(3, '0')}.${format}`).join('\n')}`;
+
+    zip.file('conversion-info.txt', infoText);
+
+    // 生成ZIP文件
+    const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+    const zipPath = outputPath.replace(/\.[^.]+$/, '.zip');
+    fs.writeFileSync(zipPath, zipBuffer);
+
+    const stats = fs.statSync(zipPath);
+    console.log(`多页ZIP创建成功，文件大小: ${(stats.size / 1024).toFixed(2)} KB`);
+
+    return {
+      type: 'multi',
+      path: zipPath,
+      pages: convertResults.length,
+      format: format,
+      quality: 'high'
+    };
+  } catch (error) {
+    console.error('创建ZIP文件失败:', error);
+    throw error;
+  }
+};
+
+// Canvas备用预览方案
+const createCanvasPreview = async (inputPath, outputPath, format, settings) => {
+  try {
 
     const pdfBuffer = fs.readFileSync(inputPath);
     const pdfDoc = await PDFDocument.load(pdfBuffer);
@@ -112,10 +235,10 @@ const convertPdfToImage = async (inputPath, outputPath) => {
     const firstPage = pages[0];
     const { width, height } = firstPage.getSize();
 
-    // 创建高质量Canvas图片
+    // 使用设置中的尺寸创建Canvas
     const canvas = require('canvas');
-    const canvasWidth = 2480;
-    const canvasHeight = 3508;
+    const canvasWidth = settings.width;
+    const canvasHeight = settings.height;
 
     const canvasInstance = canvas.createCanvas(canvasWidth, canvasHeight);
     const ctx = canvasInstance.getContext('2d');
@@ -128,61 +251,84 @@ const convertPdfToImage = async (inputPath, outputPath) => {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // 绘制文档边框
+    // 绘制文档边框 - 动态调整
     ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(100, 100, canvasWidth - 200, canvasHeight - 200);
+    ctx.lineWidth = Math.max(2, canvasWidth / 620);
+    const margin = canvasWidth * 0.04;
+    ctx.strokeRect(margin, margin, canvasWidth - 2 * margin, canvasHeight - 2 * margin);
 
-    // 标题 - 使用英文避免字体问题
+    // 动态字体大小
+    const baseFontSize = canvasWidth / 34;
+
+    // 标题
     ctx.fillStyle = '#2563eb';
-    ctx.font = 'bold 72px Arial, sans-serif';
+    ctx.font = `bold ${baseFontSize * 2}px Arial, sans-serif`;
     ctx.textAlign = 'center';
-    ctx.fillText('PDF Document Preview', canvasWidth / 2, 300);
+    ctx.fillText('PDF Document Preview', canvasWidth / 2, canvasHeight * 0.17);
 
     // 副标题
     ctx.fillStyle = '#374151';
-    ctx.font = '48px Arial, sans-serif';
-    ctx.fillText('PDF to Image Conversion', canvasWidth / 2, 400);
+    ctx.font = `${baseFontSize * 1.3}px Arial, sans-serif`;
+    ctx.fillText(`PDF to Image Conversion (${format.toUpperCase()})`, canvasWidth / 2, canvasHeight * 0.23);
 
     // 文档信息
-    ctx.font = '36px Arial, sans-serif';
+    ctx.font = `${baseFontSize}px Arial, sans-serif`;
     ctx.fillStyle = '#6b7280';
-    ctx.fillText(`Document Size: ${width.toFixed(0)} x ${height.toFixed(0)} points`, canvasWidth / 2, 500);
-    ctx.fillText(`Total Pages: ${pages.length}`, canvasWidth / 2, 560);
+    ctx.fillText(`Document Size: ${width.toFixed(0)} x ${height.toFixed(0)} points`, canvasWidth / 2, canvasHeight * 0.29);
+    ctx.fillText(`Total Pages: ${pages.length}`, canvasWidth / 2, canvasHeight * 0.33);
 
     // 文件名处理
     const fileName = path.basename(inputPath);
-    const displayName = fileName.length > 30 ? fileName.substring(0, 30) + '...' : fileName;
-    ctx.fillText(`File: ${displayName}`, canvasWidth / 2, 620);
+    const maxLength = Math.floor(canvasWidth / (baseFontSize * 0.6));
+    const displayName = fileName.length > maxLength ? fileName.substring(0, maxLength) + '...' : fileName;
+    ctx.fillText(`File: ${displayName}`, canvasWidth / 2, canvasHeight * 0.37);
 
     // 功能说明
-    ctx.font = '28px Arial, sans-serif';
+    ctx.font = `${baseFontSize * 0.8}px Arial, sans-serif`;
     ctx.fillStyle = '#9ca3af';
-    ctx.fillText('This is a preview image of the PDF document', canvasWidth / 2, 750);
-    ctx.fillText('Full PDF rendering requires additional system dependencies', canvasWidth / 2, 800);
+    ctx.fillText('This is a preview image of the PDF document', canvasWidth / 2, canvasHeight * 0.45);
+    ctx.fillText('Full PDF rendering requires additional system dependencies', canvasWidth / 2, canvasHeight * 0.48);
 
     // 添加装饰线
     ctx.strokeStyle = '#3b82f6';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = Math.max(2, canvasWidth / 827);
     ctx.beginPath();
-    ctx.moveTo(canvasWidth / 2 - 300, 850);
-    ctx.lineTo(canvasWidth / 2 + 300, 850);
+    const lineLength = canvasWidth * 0.24;
+    ctx.moveTo(canvasWidth / 2 - lineLength, canvasHeight * 0.52);
+    ctx.lineTo(canvasWidth / 2 + lineLength, canvasHeight * 0.52);
     ctx.stroke();
 
     // 添加时间戳
     const now = new Date();
-    ctx.font = '24px Arial, sans-serif';
+    ctx.font = `${baseFontSize * 0.7}px Arial, sans-serif`;
     ctx.fillStyle = '#d1d5db';
-    ctx.fillText(`Generated: ${now.toLocaleString('en-US')}`, canvasWidth / 2, 950);
+    ctx.fillText(`Generated: ${now.toLocaleString('en-US')}`, canvasWidth / 2, canvasHeight * 0.57);
 
-    // 保存为高质量JPEG
-    const buffer = canvasInstance.toBuffer('image/jpeg', { quality: 0.95 });
+    // 根据格式保存文件
+    let buffer;
+    if (format === 'png') {
+      buffer = canvasInstance.toBuffer('image/png');
+    } else if (format === 'tiff') {
+      // TIFF格式转换为PNG（Canvas不直接支持TIFF）
+      buffer = canvasInstance.toBuffer('image/png');
+      console.log('注意：Canvas不支持TIFF格式，已转换为PNG');
+    } else {
+      // 默认JPEG
+      buffer = canvasInstance.toBuffer('image/jpeg', { quality: 0.95 });
+    }
+
     fs.writeFileSync(outputPath, buffer);
 
     const stats = fs.statSync(outputPath);
-    console.log(`备用方案完成，生成预览图片，文件大小: ${(stats.size / 1024).toFixed(2)} KB`);
+    console.log(`备用方案完成，生成预览图片 (${format})，文件大小: ${(stats.size / 1024).toFixed(2)} KB`);
 
-    return outputPath;
+    return {
+      type: 'single',
+      path: outputPath,
+      pages: 1,
+      format: format,
+      quality: 'preview'
+    };
 
   } catch (error) {
     console.error('PDF转图片完全失败:', error);
@@ -207,6 +353,20 @@ const convertPdfToImage = async (inputPath, outputPath) => {
 
     throw new Error(`PDF转图片失败: ${error.message}`);
   }
+};
+
+// 保持向后兼容的原始函数
+const convertPdfToImage = async (inputPath, outputPath) => {
+  // 使用增强版函数，默认参数
+  const result = await convertPdfToImageEnhanced(inputPath, outputPath, {
+    format: 'jpg',
+    quality: 'high',
+    pages: 'first',
+    compression: 85
+  });
+
+  // 返回路径以保持兼容性
+  return result.path;
 };
 
 const convertImageToPdf = async (inputPath, outputPath) => {
@@ -305,32 +465,53 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
   });
 });
 
+// 增强版转换API
 app.post('/api/convert', async (req, res) => {
   try {
-    const { filename, targetFormat } = req.body;
-    
+    const {
+      filename,
+      targetFormat,
+      quality = 'high',
+      pages = 'first',
+      compression = 85
+    } = req.body;
+
     if (!filename || !targetFormat) {
       return res.status(400).json({ error: '缺少必要参数' });
     }
-    
+
     const inputPath = path.join(uploadsDir, filename);
-    const outputFilename = `converted-${Date.now()}.${targetFormat}`;
+    const timestamp = Date.now();
+    const outputFilename = `converted-${timestamp}.${targetFormat}`;
     const outputPath = path.join(outputsDir, outputFilename);
-    
+
     if (!fs.existsSync(inputPath)) {
       return res.status(404).json({ error: '文件不存在' });
     }
-    
-    // 根据文件类型和目标格式进行转换
+
     const fileExt = path.extname(filename).toLowerCase();
-    
+    let result;
+
     // 根据文件类型和目标格式进行转换
     if ((fileExt === '.jpg' || fileExt === '.jpeg' || fileExt === '.png') && targetFormat === 'pdf') {
       // 图片转PDF
       await convertImageToPdf(inputPath, outputPath);
-    } else if (fileExt === '.pdf' && (targetFormat === 'jpg' || targetFormat === 'jpeg')) {
-      // PDF转图片
-      await convertPdfToImage(inputPath, outputPath);
+      result = {
+        type: 'single',
+        path: outputPath,
+        pages: 1,
+        format: 'pdf',
+        quality: 'high'
+      };
+    } else if (fileExt === '.pdf' && ['jpg', 'jpeg', 'png', 'tiff'].includes(targetFormat)) {
+      // PDF转图片 - 使用增强版函数
+      const options = {
+        format: targetFormat,
+        quality: quality,
+        pages: pages,
+        compression: compression
+      };
+      result = await convertPdfToImageEnhanced(inputPath, outputPath, options);
     } else if ((fileExt === '.docx' || fileExt === '.doc') && targetFormat === 'pdf') {
       // Word转PDF (暂未实现)
       throw new Error('Word转PDF功能正在开发中，请稍后再试');
@@ -342,12 +523,30 @@ app.post('/api/convert', async (req, res) => {
         error: `不支持从 ${fileExt} 转换到 ${targetFormat} 格式`
       });
     }
-    
-    res.json({
+
+    // 构建响应数据
+    const finalFilename = path.basename(result.path);
+    const response = {
       message: '转换成功',
-      outputFilename: outputFilename,
-      downloadUrl: `/api/download/${outputFilename}`
-    });
+      outputFilename: finalFilename,
+      downloadUrl: `/api/download/${finalFilename}`,
+      conversionInfo: {
+        type: result.type,
+        pages: result.pages,
+        format: result.format,
+        quality: result.quality,
+        originalFile: filename,
+        timestamp: new Date().toISOString()
+      }
+    };
+
+    // 如果是多页转换，添加额外信息
+    if (result.type === 'multi') {
+      response.message = `转换成功，共${result.pages}页，已打包为ZIP文件`;
+      response.conversionInfo.note = 'ZIP文件包含所有页面的图片和转换信息';
+    }
+
+    res.json(response);
     
   } catch (error) {
     console.error('转换错误:', error);
