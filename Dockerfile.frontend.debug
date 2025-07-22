@@ -1,0 +1,70 @@
+# 调试版前端Dockerfile - 用于学习Docker调试技巧
+FROM node:20-slim AS builder
+
+WORKDIR /app
+
+# 安装基础构建工具
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# 复制package文件
+COPY package*.json ./
+
+# 安装依赖（忽略脚本以避免原生模块问题）
+RUN npm install --ignore-scripts
+
+# 复制源代码
+COPY . .
+
+# 调试：检查文件结构
+RUN echo "=== 检查项目文件 ===" && \
+    ls -la && \
+    echo "=== 检查package.json ===" && \
+    cat package.json | grep -A5 -B5 "scripts" && \
+    echo "=== 检查next.config.ts ===" && \
+    cat next.config.ts
+
+# 尝试构建并显示详细信息
+RUN echo "=== 开始构建 ===" && \
+    npm run build && \
+    echo "=== 构建完成，检查输出 ===" && \
+    ls -la .next/ && \
+    echo "=== 检查standalone目录 ===" && \
+    ls -la .next/standalone/ || echo "standalone目录不存在"
+
+# 运行阶段
+FROM node:20-slim AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# 创建用户
+RUN groupadd --gid 1001 nodejs \
+    && useradd --uid 1001 --gid nodejs --shell /bin/bash --create-home nextjs
+
+# 复制public文件夹
+COPY --from=builder /app/public ./public
+
+# 检查构建产物是否存在
+RUN echo "=== 检查构建产物 ==="
+COPY --from=builder /app/.next/standalone ./ || echo "standalone不存在，使用备用方案"
+COPY --from=builder /app/.next/static ./.next/static || echo "static不存在"
+
+# 如果standalone不存在，复制整个.next目录
+COPY --from=builder /app/.next ./.next || echo ".next目录不存在"
+COPY --from=builder /app/node_modules ./node_modules || echo "node_modules不存在"
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# 尝试不同的启动方式
+CMD ["sh", "-c", "if [ -f server.js ]; then node server.js; else npm start; fi"]

@@ -1,0 +1,49 @@
+# 最小化前端Dockerfile - 用于学习和调试
+FROM node:20-slim AS builder
+
+WORKDIR /app
+
+# 安装基础构建工具
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# 复制package文件
+COPY package*.json ./
+
+# 先尝试安装不包含原生依赖的包
+RUN npm install --ignore-scripts
+
+# 复制源代码
+COPY . .
+
+# 尝试构建
+RUN npm run build || echo "Build failed, but continuing..."
+
+# 运行阶段
+FROM node:20-slim AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# 创建用户
+RUN groupadd --gid 1001 nodejs \
+    && useradd --uid 1001 --gid nodejs --shell /bin/bash --create-home nextjs
+
+# 复制必要文件
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

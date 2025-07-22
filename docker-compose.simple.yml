@@ -1,0 +1,25 @@
+# 简化版Docker Compose - 仅用于测试
+
+services:
+  # 后端服务
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: formatmagic-backend-simple
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data/uploads:/app/uploads
+      - ./data/outputs:/app/outputs
+      - ./data/temp:/app/temp
+    restart: unless-stopped
+    networks:
+      - formatmagic-network
+
+networks:
+  formatmagic-network:
+    driver: bridge
