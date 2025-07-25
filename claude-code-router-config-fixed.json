@@ -1,0 +1,25 @@
+{
+  "LOG": true,
+  "Providers": [
+    {
+      "name": "kimi2",
+      "api_base_url": "https://api.moonshot.cn/v1",
+      "api_key": "sk-uUsX6dX28RqxdLqgYIgjiLzUU4lx9osHdWjRQBYzsxxJbfti",
+      "models": [
+        "moonshot-v1-8k",
+        "moonshot-v1-32k",
+        "moonshot-v1-128k"
+      ],
+      "transformer": {
+        "use": ["openai"]
+      }
+    }
+  ],
+  "Router": {
+    "default": "kimi2,moonshot-v1-8k",
+    "background": "kimi2,moonshot-v1-8k",
+    "think": "kimi2,moonshot-v1-32k",
+    "longContext": "kimi2,moonshot-v1-128k",
+    "webSearch": "kimi2,moonshot-v1-8k"
+  }
+}

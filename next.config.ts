@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 启用standalone输出模式，用于Docker部署
-  output: 'standalone',
+  // 根据环境选择输出模式
+  output: process.env.VERCEL ? undefined : 'standalone',
 
   // 图片优化配置
   images: {
-    unoptimized: true, // 在Docker环境中禁用图片优化
+    unoptimized: process.env.VERCEL ? false : true, // Vercel环境启用优化
   },
 
   // 环境变量配置
