@@ -9,10 +9,9 @@ import ConversionModal from '@/components/ConversionModal';
 interface ConversionResult {
   outputFilename: string;
   downloadUrl: string;
-  images?: string[];
 }
 
-export default function PdfToImagePage() {
+export default function PdfToWordPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [conversionResult, setConversionResult] = useState<ConversionResult | null>(null);
@@ -21,10 +20,9 @@ export default function PdfToImagePage() {
   const [conversionStatus, setConversionStatus] = useState<'uploading' | 'converting' | 'success' | 'error'>('converting');
   const [progress, setProgress] = useState(0);
   const [options, setOptions] = useState({
-    format: 'jpg',
-    quality: 'high',
-    dpi: '300',
-    pages: 'all'
+    format: 'docx',
+    includeImages: true,
+    preserveLayout: true
   });
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -44,7 +42,7 @@ export default function PdfToImagePage() {
 
   const handleFilesSelected = (files: File[]) => {
     if (files.length > 0) {
-      setFile(files[0]); // 只取第一个文件
+      setFile(files[0]);
       setError('');
       setConversionResult(null);
     }
@@ -57,13 +55,34 @@ export default function PdfToImagePage() {
     }
 
     setIsConverting(true);
+    setShowModal(true);
     setError('');
+    setProgress(0);
+    setConversionStatus('uploading');
 
     try {
-      // 先上传文件
+      // 模拟上传进度
+      for (let i = 0; i <= 50; i += 10) {
+        setProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('options', JSON.stringify(options));
+
+      setConversionStatus('converting');
+
+      // 模拟转换进度
+      for (let i = 50; i <= 90; i += 10) {
+        setProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      // 第一步：上传文件
       const uploadFormData = new FormData();
       uploadFormData.append('file', file);
-      
+
       const uploadResponse = await fetch('http://localhost:3001/api/upload', {
         method: 'POST',
         body: uploadFormData
@@ -75,31 +94,33 @@ export default function PdfToImagePage() {
       }
 
       const uploadResult = await uploadResponse.json();
-      
-      // 然后调用转换API
-      const convertResponse = await fetch('http://localhost:3001/api/convert', {
+
+      // 第二步：转换文件
+      const response = await fetch('http://localhost:3001/api/convert', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           filename: uploadResult.filename,
-          targetFormat: options.format,
-          quality: options.quality,
-          pages: options.pages
+          targetFormat: 'docx',
+          preserveLayout: options.preserveLayout
         })
       });
 
-      if (!convertResponse.ok) {
-        const errorData = await convertResponse.json();
+      if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(errorData.error || '转换失败');
       }
 
-      const result = await convertResponse.json();
+      const result = await response.json();
       setConversionResult(result);
+      setProgress(100);
+      setConversionStatus('success');
 
     } catch (err) {
       setError(err instanceof Error ? err.message : '转换过程中发生错误');
+      setConversionStatus('error');
     } finally {
       setIsConverting(false);
     }
@@ -120,9 +141,9 @@ export default function PdfToImagePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 标题区域 */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">PDF转图片</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">PDF转Word</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            将PDF文档的每一页转换为JPG或PNG图片。支持高质量输出和自定义设置。
+            将PDF文档转换为可编辑的Word格式（.docx），支持文本提取和格式保持。
           </p>
         </div>
 
@@ -137,7 +158,7 @@ export default function PdfToImagePage() {
                 maxSize={50}
                 onFilesSelected={handleFilesSelected}
                 title="选择PDF文件"
-                description="或将PDF拖拽到这里"
+                description="或将PDF文件拖拽到这里"
               />
             </div>
 
@@ -172,64 +193,69 @@ export default function PdfToImagePage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">输出格式</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
-                    onClick={() => setOptions(prev => ({ ...prev, format: 'jpg' }))}
+                    onClick={() => setOptions(prev => ({ ...prev, format: 'docx' }))}
                     className={`p-3 border rounded-md text-sm ${
-                      options.format === 'jpg'
-                        ? 'border-red-500 bg-red-50 text-red-700'
+                      options.format === 'docx'
+                        ? 'border-green-500 bg-green-50 text-green-700'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    JPG
+                    DOCX
                   </button>
                   <button
-                    onClick={() => setOptions(prev => ({ ...prev, format: 'png' }))}
+                    onClick={() => setOptions(prev => ({ ...prev, format: 'doc' }))}
                     className={`p-3 border rounded-md text-sm ${
-                      options.format === 'png'
-                        ? 'border-red-500 bg-red-50 text-red-700'
+                      options.format === 'doc'
+                        ? 'border-green-500 bg-green-50 text-green-700'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    PNG
+                    DOC
                   </button>
                 </div>
               </div>
 
-              {/* 图片质量 */}
+              {/* 布局保持 */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">图片质量</label>
-                <select
-                  value={options.quality}
-                  onChange={(e) => setOptions(prev => ({ ...prev, quality: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="low">低质量 (72 DPI)</option>
-                  <option value="medium">中等质量 (150 DPI)</option>
-                  <option value="high">高质量 (300 DPI)</option>
-                  <option value="ultra">超高质量 (600 DPI)</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  选项
+                </label>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={options.preserveLayout}
+                      onChange={(e) => setOptions(prev => ({ ...prev, preserveLayout: e.target.checked }))}
+                      className="mr-2 h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <span className="text-sm text-gray-700">保持原布局</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={options.includeImages}
+                      onChange={(e) => setOptions(prev => ({ ...prev, includeImages: e.target.checked }))}
+                      className="mr-2 h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <span className="text-sm text-gray-700">包含图片</span>
+                  </label>
+                </div>
               </div>
 
-              {/* 页面范围 */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">页面范围</label>
-                <select
-                  value={options.pages}
-                  onChange={(e) => setOptions(prev => ({ ...prev, pages: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="all">所有页面</option>
-                  <option value="first">仅第一页</option>
-                  <option value="custom">自定义范围</option>
-                </select>
+              {/* 转换提示 */}
+              <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-700">
+                  <strong>提示：</strong> PDF转Word会将PDF内容转换为可编辑的Word文档，复杂格式可能需要手动调整。
+                </p>
               </div>
 
               {/* 转换按钮 */}
               <button
                 onClick={handleConvert}
                 disabled={!file || isConverting}
-                className="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
               >
-                {isConverting ? '转换中...' : '转换为图片'}
+                {isConverting ? '转换中...' : '转换为Word'}
               </button>
 
               {/* 错误信息 */}
@@ -247,7 +273,7 @@ export default function PdfToImagePage() {
                     onClick={handleDownload}
                     className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    下载图片文件
+                    下载Word文件
                   </button>
                 </div>
               )}
@@ -264,6 +290,22 @@ export default function PdfToImagePage() {
           </p>
         </div>
       </footer>
+
+      {/* 转换模态框 */}
+      <ConversionModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="PDF转Word"
+        progress={progress}
+        status={conversionStatus}
+        message={error}
+        onDownload={handleDownload}
+        onRetry={() => {
+          setShowModal(false);
+          setError('');
+          handleConvert();
+        }}
+      />
     </div>
   );
 }

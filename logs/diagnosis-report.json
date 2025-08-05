@@ -1,0 +1,49 @@
+{
+  "system": {
+    "platform": "win32",
+    "arch": "x64",
+    "nodeVersion": "v20.18.0",
+    "cwd": "E:\\1_CODE\\word_pdf_img",
+    "isWindows": true,
+    "isLinux": false,
+    "isMac": false
+  },
+  "dependencies": {
+    "Ghostscript": {
+      "installed": false,
+      "error": "Command failed: gswin64c --version\n/usr/bin/bash: line 1: gswin64c: command not found\n"
+    },
+    "GraphicsMagick": {
+      "installed": false,
+      "error": "Command failed: gm --version\n/usr/bin/bash: line 1: gm: command not found\n"
+    },
+    "ImageMagick": {
+      "installed": false,
+      "error": "Command failed: convert --version\n��Ч���������\r\n"
+    }
+  },
+  "permissions": {
+    "E:\\1_CODE\\word_pdf_img\\server\\uploads": {
+      "accessible": true,
+      "exists": true
+    },
+    "E:\\1_CODE\\word_pdf_img\\server\\outputs": {
+      "accessible": true,
+      "exists": true
+    },
+    "E:\\1_CODE\\word_pdf_img\\temp": {
+      "accessible": true,
+      "exists": true
+    }
+  },
+  "fonts": {
+    "simsun.ttc": true,
+    "simhei.ttf": true,
+    "msyh.ttc": true
+  },
+  "recommendations": [
+    "安装Ghostscript",
+    "安装GraphicsMagick",
+    "安装ImageMagick"
+  ]
+}

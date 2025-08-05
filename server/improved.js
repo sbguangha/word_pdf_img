@@ -54,7 +54,7 @@ const upload = multer({
   }
 });
 
-// 改进的PDF转图片函数
+// 改进的PDF转图片函数 - 修复版
 const convertPdfToImageImproved = async (inputPath, outputPath) => {
   try {
     log('=== 开始改进版PDF转图片 ===');
@@ -62,47 +62,58 @@ const convertPdfToImageImproved = async (inputPath, outputPath) => {
     log('输出文件: ' + outputPath);
     log('当前时间: ' + new Date().toLocaleString());
 
-    // 方法1: 使用PDF.js进行真实渲染
+    // 方法1: 使用PDF.js进行真实渲染 - 修复版
     try {
-      log('🎯 === 方案1: 尝试使用PDF.js进行真实PDF渲染 ===');
+      log('🎯 === 方案1: 使用PDF.js进行真实PDF渲染（修复版） ===');
 
       // 设置Node.js环境的polyfills
       const canvas = require('canvas');
+      const { Image } = canvas;
 
-      // 为PDF.js设置必要的全局变量
+      // 为PDF.js设置必要的全局变量和polyfills
       if (typeof global.DOMMatrix === 'undefined') {
-        // 简单的DOMMatrix polyfill
         global.DOMMatrix = class DOMMatrix {
           constructor(init) {
             if (Array.isArray(init)) {
-              this.a = init[0] || 1;
-              this.b = init[1] || 0;
-              this.c = init[2] || 0;
-              this.d = init[3] || 1;
-              this.e = init[4] || 0;
-              this.f = init[5] || 0;
+              this.a = init[0] || 1; this.b = init[1] || 0; this.c = init[2] || 0;
+              this.d = init[3] || 1; this.e = init[4] || 0; this.f = init[5] || 0;
             } else {
-              this.a = 1; this.b = 0; this.c = 0;
-              this.d = 1; this.e = 0; this.f = 0;
+              this.a = 1; this.b = 0; this.c = 0; this.d = 1; this.e = 0; this.f = 0;
             }
           }
         };
       }
 
+      // 设置Canvas Image polyfill
+      if (typeof global.Image === 'undefined') {
+        global.Image = Image;
+      }
+
+      // 设置Canvas polyfill
+      if (typeof global.HTMLCanvasElement === 'undefined') {
+        global.HTMLCanvasElement = canvas.Canvas;
+      }
+
       // 动态导入pdfjs-dist
       const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
+      // 设置worker路径（避免worker相关错误）
+      pdfjsLib.GlobalWorkerOptions.workerSrc = null;
+
       log('✅ PDF.js导入成功');
 
-      // 读取PDF文件
+      // 读取PDF文件并转换为正确格式
       const pdfBuffer = fs.readFileSync(inputPath);
-      // 转换Buffer为Uint8Array
       const pdfData = new Uint8Array(pdfBuffer);
 
-      // 加载PDF文档 - 使用最简配置
+      // 加载PDF文档 - 使用兼容性配置
       const loadingTask = pdfjsLib.getDocument({
         data: pdfData,
-        verbosity: 0
+        verbosity: 0,
+        disableWorker: true,  // 禁用worker避免兼容性问题
+        isEvalSupported: false,
+        disableAutoFetch: true,
+        disableStream: true
       });
 
       const pdfDocument = await loadingTask.promise;
@@ -122,7 +133,7 @@ const convertPdfToImageImproved = async (inputPath, outputPath) => {
       const pageFiles = [];
       const renderScale = 2.5; // 高分辨率渲染
 
-      // 渲染每一页为独立图片
+      // 渲染每一页为独立图片 - 修复版
       for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
         log(`🖼️ 渲染第${pageNum}页为独立图片...`);
 
@@ -145,10 +156,29 @@ const convertPdfToImageImproved = async (inputPath, outputPath) => {
           pageContext.fillStyle = 'white';
           pageContext.fillRect(0, 0, pageWidth, pageHeight);
 
-          // 渲染PDF页面到Canvas
+          // 增强的渲染上下文 - 添加Canvas兼容性支持
           const renderContext = {
             canvasContext: pageContext,
-            viewport: viewport
+            viewport: viewport,
+            // 添加图像处理支持
+            canvasFactory: {
+              create: (width, height) => {
+                const canvasElement = canvas.createCanvas(width, height);
+                return {
+                  canvas: canvasElement,
+                  context: canvasElement.getContext('2d')
+                };
+              },
+              reset: (canvasAndContext, width, height) => {
+                canvasAndContext.canvas.width = width;
+                canvasAndContext.canvas.height = height;
+              },
+              destroy: (canvasAndContext) => {
+                // 清理资源
+                canvasAndContext.canvas.width = 0;
+                canvasAndContext.canvas.height = 0;
+              }
+            }
           };
 
           await page.render(renderContext).promise;

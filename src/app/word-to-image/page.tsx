@@ -9,10 +9,9 @@ import ConversionModal from '@/components/ConversionModal';
 interface ConversionResult {
   outputFilename: string;
   downloadUrl: string;
-  images?: string[];
 }
 
-export default function PdfToImagePage() {
+export default function WordToImagePage() {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [conversionResult, setConversionResult] = useState<ConversionResult | null>(null);
@@ -34,9 +33,12 @@ export default function PdfToImagePage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const droppedFiles = Array.from(e.dataTransfer.files);
-    const pdfFile = droppedFiles.find(file => file.type === 'application/pdf');
-    if (pdfFile) {
-      setFile(pdfFile);
+    const wordFile = droppedFiles.find(file => 
+      file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      file.type === 'application/msword'
+    );
+    if (wordFile) {
+      setFile(wordFile);
       setError('');
       setConversionResult(null);
     }
@@ -44,7 +46,7 @@ export default function PdfToImagePage() {
 
   const handleFilesSelected = (files: File[]) => {
     if (files.length > 0) {
-      setFile(files[0]); // 只取第一个文件
+      setFile(files[0]);
       setError('');
       setConversionResult(null);
     }
@@ -52,54 +54,57 @@ export default function PdfToImagePage() {
 
   const handleConvert = async () => {
     if (!file) {
-      setError('请选择一个PDF文件');
+      setError('请选择一个Word文件');
       return;
     }
 
     setIsConverting(true);
+    setShowModal(true);
     setError('');
+    setProgress(0);
+    setConversionStatus('uploading');
 
     try {
-      // 先上传文件
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
-      
-      const uploadResponse = await fetch('http://localhost:3001/api/upload', {
-        method: 'POST',
-        body: uploadFormData
-      });
-
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.json();
-        throw new Error(errorData.error || '文件上传失败');
+      // 模拟上传进度
+      for (let i = 0; i <= 50; i += 10) {
+        setProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
 
-      const uploadResult = await uploadResponse.json();
-      
-      // 然后调用转换API
-      const convertResponse = await fetch('http://localhost:3001/api/convert', {
+      setConversionStatus('converting');
+
+      // 模拟转换进度
+      for (let i = 50; i <= 90; i += 10) {
+        setProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+
+      const response = await fetch('http://localhost:3001/api/convert', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          filename: uploadResult.filename,
+          filename: file.name,
           targetFormat: options.format,
           quality: options.quality,
           pages: options.pages
         })
       });
 
-      if (!convertResponse.ok) {
-        const errorData = await convertResponse.json();
+      if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(errorData.error || '转换失败');
       }
 
-      const result = await convertResponse.json();
+      const result = await response.json();
       setConversionResult(result);
+      setProgress(100);
+      setConversionStatus('success');
 
     } catch (err) {
       setError(err instanceof Error ? err.message : '转换过程中发生错误');
+      setConversionStatus('error');
     } finally {
       setIsConverting(false);
     }
@@ -120,9 +125,9 @@ export default function PdfToImagePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 标题区域 */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">PDF转图片</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Word转图片</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            将PDF文档的每一页转换为JPG或PNG图片。支持高质量输出和自定义设置。
+            将Word文档的每一页转换为JPG或PNG图片。支持高质量输出和自定义设置。
           </p>
         </div>
 
@@ -132,12 +137,12 @@ export default function PdfToImagePage() {
             {/* 文件上传区域 */}
             <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
               <FileUpload
-                accept=".pdf,application/pdf"
+                accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 multiple={false}
                 maxSize={50}
                 onFilesSelected={handleFilesSelected}
-                title="选择PDF文件"
-                description="或将PDF拖拽到这里"
+                title="选择Word文件"
+                description="或将Word文件拖拽到这里"
               />
             </div>
 
@@ -146,8 +151,8 @@ export default function PdfToImagePage() {
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">已选择的文件</h3>
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
@@ -175,7 +180,7 @@ export default function PdfToImagePage() {
                     onClick={() => setOptions(prev => ({ ...prev, format: 'jpg' }))}
                     className={`p-3 border rounded-md text-sm ${
                       options.format === 'jpg'
-                        ? 'border-red-500 bg-red-50 text-red-700'
+                        ? 'border-orange-500 bg-orange-50 text-orange-700'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
@@ -185,7 +190,7 @@ export default function PdfToImagePage() {
                     onClick={() => setOptions(prev => ({ ...prev, format: 'png' }))}
                     className={`p-3 border rounded-md text-sm ${
                       options.format === 'png'
-                        ? 'border-red-500 bg-red-50 text-red-700'
+                        ? 'border-orange-500 bg-orange-50 text-orange-700'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
@@ -200,7 +205,7 @@ export default function PdfToImagePage() {
                 <select
                   value={options.quality}
                   onChange={(e) => setOptions(prev => ({ ...prev, quality: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="low">低质量 (72 DPI)</option>
                   <option value="medium">中等质量 (150 DPI)</option>
@@ -215,7 +220,7 @@ export default function PdfToImagePage() {
                 <select
                   value={options.pages}
                   onChange={(e) => setOptions(prev => ({ ...prev, pages: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="all">所有页面</option>
                   <option value="first">仅第一页</option>
@@ -223,11 +228,18 @@ export default function PdfToImagePage() {
                 </select>
               </div>
 
+              {/* 转换提示 */}
+              <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  <strong>提示：</strong> Word转图片会将Word文档的每一页转换为单独的图片文件，多页文档将打包为ZIP文件。
+                </p>
+              </div>
+
               {/* 转换按钮 */}
               <button
                 onClick={handleConvert}
                 disabled={!file || isConverting}
-                className="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-orange-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
               >
                 {isConverting ? '转换中...' : '转换为图片'}
               </button>
@@ -264,6 +276,22 @@ export default function PdfToImagePage() {
           </p>
         </div>
       </footer>
+
+      {/* 转换模态框 */}
+      <ConversionModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Word转图片"
+        progress={progress}
+        status={conversionStatus}
+        message={error}
+        onDownload={handleDownload}
+        onRetry={() => {
+          setShowModal(false);
+          setError('');
+          handleConvert();
+        }}
+      />
     </div>
   );
 }

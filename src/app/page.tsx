@@ -30,8 +30,8 @@ const conversionTools = [
     description: '将Word文档转换为PDF格式',
     icon: '📝',
     color: 'bg-green-500',
-    href: '#',
-    available: false
+    href: '/word-to-pdf',
+    available: true
   },
   {
     id: 'pdf-to-word',
@@ -39,8 +39,8 @@ const conversionTools = [
     description: '将PDF文档转换为可编辑的Word格式',
     icon: '📋',
     color: 'bg-purple-500',
-    href: '#',
-    available: false
+    href: '/pdf-to-word',
+    available: true
   },
   {
     id: 'word-to-image',
@@ -48,8 +48,8 @@ const conversionTools = [
     description: '将Word文档转换为JPG或PNG图片',
     icon: '🖨️',
     color: 'bg-orange-500',
-    href: '#',
-    available: false
+    href: '/word-to-image',
+    available: true
   },
   {
     id: 'image-to-word',

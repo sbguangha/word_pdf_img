@@ -83,8 +83,8 @@ export default function ImageToPdfPage() {
       }
 
       const formData = new FormData();
-      files.forEach((file, index) => {
-        formData.append(`files`, file);
+      files.forEach((file) => {
+        formData.append('files', file);
       });
       formData.append('options', JSON.stringify(options));
 
@@ -96,7 +96,7 @@ export default function ImageToPdfPage() {
         await new Promise(resolve => setTimeout(resolve, 200));
       }
 
-      const response = await fetch('http://localhost:3001/api/image-to-pdf', {
+      const response = await fetch('http://localhost:3001/api/images-to-pdf', {
         method: 'POST',
         body: formData
       });
